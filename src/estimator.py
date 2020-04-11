@@ -14,6 +14,9 @@ def estimator(data):
 	impactInfectionsByRequestedTime = (data['reportedCases'] * 10) * (2 ** (timeInDays // 3))
 	impactSevereCasesByRequestedTime = 0.15 * (data['reportedCases'] * 10) * (2 ** (timeInDays // 3))
 	impactHospitalBedsByRequestedTime = (0.35 * data['totalHospitalBeds']) - impactSevereCasesByRequestedTime
+	impactCasesForICUByRequestedTime = 0.05 * impactInfectionsByRequestedTime
+	impactCasesForVentilatorsByRequestedTime = 0.02 * impactInfectionsByRequestedTime
+	impactDollarsInFlight = (impactInfectionsByRequestedTime * data["region"]['avgDailyIncomePopulation']) * data["region"]['avgDailyIncomeInUSD'] * timeInDays
 
 	#Compute estimates:
 	##Severe Impact computation
@@ -21,6 +24,9 @@ def estimator(data):
 	severeImpactInfectionsByRequestedTime = (data['reportedCases'] * 50) * (2 ** (timeInDays // 3))
 	severeImpactSevereCasesByRequestedTime =  0.15 * (data['reportedCases'] * 50) * (2 ** (timeInDays // 3))
 	severeImpactHospitalBedsByRequestedTime = (0.35 * data['totalHospitalBeds']) - severeImpactSevereCasesByRequestedTime
+	severeImpactCasesForICUByRequestedTime = 0.05 * severeImpactInfectionsByRequestedTime
+	severeImpactCasesForVentilatorsByRequestedTime = 0.02 * severeImpactInfectionsByRequestedTime
+	severeImpactDollarsInFlight = (severeImpactInfectionsByRequestedTime * data["region"]['avgDailyIncomePopulation']) * data["region"]['avgDailyIncomeInUSD'] * timeInDays
 
 	#Estimates
 	estimate = {
@@ -28,14 +34,20 @@ def estimator(data):
 			'currentlyInfected' : impactCurrentlyInfected,
 			'infectionsByRequestedTime' : impactInfectionsByRequestedTime,
 			'severeCasesByRequestedTime' : impactSevereCasesByRequestedTime,
-			'HospitalBedsByRequestedTime' : impactHospitalBedsByRequestedTime
+			'HospitalBedsByRequestedTime' : impactHospitalBedsByRequestedTime,
+			'casesForICUByRequestedTime' : impactCasesForICUByRequestedTime,
+			'casesForVentilatorsByRequestedTime' : impactCasesForVentilatorsByRequestedTime,
+			'dollarsInFlight' : impactDollarsInFlight
 		},
 
 		'severeImpact' : {
 				'currentlyInfected' : severeImpactCurrentlyInfected,
 				'infectionsByRequestedTime' :  severeImpactInfectionsByRequestedTime,
 				'severeCasesByRequestedTime' : severeImpactSevereCasesByRequestedTime,
-				'HospitalBedsByRequestedTime' : severeImpactHospitalBedsByRequestedTime
+				'HospitalBedsByRequestedTime' : severeImpactHospitalBedsByRequestedTime,
+				'casesForICUByRequestedTime' : severeImpactCasesForICUByRequestedTime,
+				'casesForVentilatorsByRequestedTime' : severeImpactCasesForVentilatorsByRequestedTime,
+				'dollarsInFlight' : severeImpactDollarsInFlight
 		}
 
 	}
